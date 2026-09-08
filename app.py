@@ -4,7 +4,7 @@ from google import genai
 import requests,math,os,re
 
 load_dotenv()
-app=Flask(__name__)
+app=Flask(__name__,template_folder=".",static_folder=".",static_url_path="")
 app.secret_key="voyageai-secret-key-2026"
 
 GEMINI_API_KEY=os.getenv("GEMINI_API_KEY")
