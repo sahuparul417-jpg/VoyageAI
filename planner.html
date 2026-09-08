@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Plan Your Trip — VoyageAI</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=4000">
+</head>
+<body class="planner-page">
+<header class="site-header planner-header">
+<a href="/" class="logo"><span class="logo-mark">✦</span><span><b>VoyageAI</b><small>AI TRIP PLANNER</small></span></a>
+<a href="/" class="back-link">← Home</a>
+</header>
+<main class="planner-main">
+<div class="planner-intro">
+<span class="step-label">STEP 01 · TRIP DETAILS</span>
+<h1>Build your journey.</h1>
+<p>Tell VoyageAI what kind of trip you want and let the intelligent planner organize it.</p>
+</div>
+{% if error_message %}
+<div class="error-message">
+<span>!</span>
+<div><strong>Unable to create your trip</strong><p>{{ error_message }}</p></div>
+</div>
+{% endif %}
+<form action="/plan" method="POST" class="planner-form">
+<section class="planner-section">
+<div class="section-top">
+<div class="section-icon">📍</div>
+<div><h2>Destination</h2><p>Where would you like to go?</p></div>
+</div>
+<label for="destination">Destination</label>
+<input class="large-input" type="text" id="destination" name="destination" placeholder="Paris, Goa, Dubai, Manali..." autocomplete="off" required>
+</section>
+
+<section class="planner-section">
+<div class="section-top">
+<div class="section-icon">🚉</div>
+<div><h2>Journey</h2><p>Where are you starting from?</p></div>
+</div>
+<label for="start_location">Starting Location</label>
+<input class="large-input" type="text" id="start_location" name="start_location" placeholder="Amravati, Mumbai, Delhi..." autocomplete="off">
+<span class="field-note">Optional — used to estimate transport options.</span>
+</section>
+
+<section class="planner-section">
+<div class="section-top">
+<div class="section-icon">🗓️</div>
+<div><h2>Trip details</h2><p>Tell us about your group and duration.</p></div>
+</div>
+<div class="two-column">
+<div class="field">
+<label for="days">Number of Days</label>
+<div class="input-wrapper"><span>☀️</span><input type="number" id="days" name="days" min="1" max="30" value="3" required></div>
+</div>
+<div class="field">
+<label for="people">Number of Travellers</label>
+<div class="input-wrapper"><span>👥</span><input type="number" id="people" name="people" min="1" max="50" value="2" required></div>
+</div>
+</div>
+</section>
+
+<section class="planner-section">
+<div class="section-top">
+<div class="section-icon">💰</div>
+<div><h2>Budget</h2><p>Set your approximate total trip budget.</p></div>
+</div>
+<label for="budget">Total Budget</label>
+<div class="money-input"><span>₹</span><input type="number" id="budget" name="budget" min="0" step="500" value="15000" required></div>
+<span class="field-note">This is a planning budget. Actual prices may vary.</span>
+</section>
+
+<section class="planner-section">
+<div class="section-top">
+<div class="section-icon">✨</div>
+<div><h2>Your interests</h2><p>Select what you would like to experience.</p></div>
+</div>
+<div class="interest-grid">
+<label class="interest-card"><input type="checkbox" name="interests" value="nature"><span class="interest-symbol">🌿</span><span class="interest-name">Nature</span></label>
+<label class="interest-card"><input type="checkbox" name="interests" value="history"><span class="interest-symbol">🏛️</span><span class="interest-name">History</span></label>
+<label class="interest-card"><input type="checkbox" name="interests" value="culture"><span class="interest-symbol">🎭</span><span class="interest-name">Culture</span></label>
+<label class="interest-card"><input type="checkbox" name="interests" value="adventure"><span class="interest-symbol">🧗</span><span class="interest-name">Adventure</span></label>
+<label class="interest-card"><input type="checkbox" name="interests" value="shopping"><span class="interest-symbol">🛍️</span><span class="interest-name">Shopping</span></label>
+<label class="interest-card"><input type="checkbox" name="interests" value="food"><span class="interest-symbol">🍜</span><span class="interest-name">Food</span></label>
+<label class="interest-card"><input type="checkbox" name="interests" value="relaxation"><span class="interest-symbol">🌅</span><span class="interest-name">Relaxation</span></label>
+<label class="interest-card"><input type="checkbox" name="interests" value="photography"><span class="interest-symbol">📸</span><span class="interest-name">Photography</span></label>
+</div>
+</section>
+
+<button type="submit" class="generate-trip-button">
+<span class="sparkle">✦</span>
+<span>Generate My AI Trip</span>
+<span class="button-arrow">→</span>
+</button>
+
+<div class="form-footer">
+<span>🌐 Live destination data</span><span>·</span>
+<span>🤖 AI assisted planning</span><span>·</span>
+<span>🧭 Smart route sequencing</span>
+</div>
+</form>
+</main>
+<script src="{{ url_for('static', filename='script.js') }}?v=4000"></script>
+</body>
+</html>

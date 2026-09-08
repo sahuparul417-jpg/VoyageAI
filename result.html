@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ destination }} — VoyageAI</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=4000">
+</head>
+
+<body class="result-page">
+
+<header class="site-header result-header-nav">
+<a href="/" class="logo">
+<span class="logo-mark">✦</span>
+<span><b>VoyageAI</b><small>AI TRIP PLANNER</small></span>
+</a>
+<a href="/planner" class="new-trip">+ New Trip</a>
+</header>
+
+<main class="result-main">
+
+<section class="result-hero">
+<div>
+<span class="result-eyebrow">YOUR PERSONALIZED TRIP</span>
+<h1>{{ destination }}</h1>
+<p>{{ days }}-day itinerary · {{ people }} traveller{% if people != 1 %}s{% endif %}</p>
+</div>
+
+{% if weather and weather.temperature is not none %}
+<div class="weather-box">
+<div class="weather-symbol">☀️</div>
+<div>
+<span>CURRENT WEATHER</span>
+<strong>{{ weather.temperature }}°C</strong>
+</div>
+</div>
+{% endif %}
+</section>
+
+<section class="summary-row">
+
+<div class="summary-item">
+<div class="summary-icon">🗓️</div>
+<div><span>DURATION</span><strong>{{ days }} Days</strong></div>
+</div>
+
+<div class="summary-item">
+<div class="summary-icon">👥</div>
+<div><span>TRAVELLERS</span><strong>{{ people }}</strong></div>
+</div>
+
+<div class="summary-item">
+<div class="summary-icon">₹</div>
+<div><span>TOTAL BUDGET</span><strong>₹{{ "{:,.0f}".format(budget) }}</strong></div>
+</div>
+
+<div class="summary-item">
+<div class="summary-icon">👤</div>
+<div><span>PER PERSON</span><strong>₹{{ "{:,.0f}".format(budget_per_person) }}</strong></div>
+</div>
+
+</section>
+
+<section class="workspace">
+
+<div class="workspace-tabs">
+
+<button class="workspace-tab active" onclick="showResultTab('itinerary', this)">
+<span>🗓️</span><b>Itinerary</b><small>Day by day</small>
+</button>
+
+<button class="workspace-tab" onclick="showResultTab('transport', this)">
+<span>🚆</span><b>Transport</b><small>Compare options</small>
+</button>
+
+<button class="workspace-tab" onclick="showResultTab('nearby', this)">
+<span>🍴</span><b>Nearby</b><small>Food & hotels</small>
+</button>
+
+<button class="workspace-tab" onclick="showResultTab('map', this)">
+<span>🗺️</span><b>Map</b><small>Explore location</small>
+</button>
+
+</div>
+
+<div id="resultItinerary" class="workspace-panel active">
+
+<div class="panel-title">
+<div>
+<span>DAY-BY-DAY PLAN</span>
+<h2>Your itinerary</h2>
+</div>
+
+<div class="interest-summary">
+{% if interests %}
+{% for interest in interests %}
+<span>{{ interest|capitalize }}</span>
+{% endfor %}
+{% else %}
+<span>AI Planned</span>
+{% endif %}
+</div>
+</div>
+
+<div class="days-container">
+
+{% for day in itinerary %}
+
+<article class="day-block">
+
+<div class="day-sidebar">
+<span>DAY</span>
+<strong>{{ "%02d"|format(day.day) }}</strong>
+</div>
+
+<div class="day-details">
+
+{% if day.places %}
+
+{% for place in day.places %}
+
+<div class="activity-row">
+
+<div class="activity-time">
+{% if loop.index == 1 %}
+09:00
+{% elif loop.index == 2 %}
+12:30
+{% elif loop.index == 3 %}
+16:00
+{% else %}
+19:00
+{% endif %}
+</div>
+
+<div class="activity-info">
+
+<div class="activity-heading">
+<h3>{{ place.name }}</h3>
+<span class="ai-score">AI {{ place.ai_score }}</span>
+</div>
+
+<p>{{ place.description }}</p>
+
+<div class="activity-meta">
+
+<span>📏 {{ place.distance }} km away</span>
+
+{% if place.tags %}
+<span>✦ {{ place.tags|join(" · ")|capitalize }}</span>
+{% endif %}
+
+</div>
+
+<div class="activity-actions">
+
+<a
+target="_blank"
+rel="noopener noreferrer"
+href="https://www.google.com/maps/search/?api=1&query={{ place.lat }},{{ place.lon }}"
+>
+📍 Live Location
+</a>
+
+<a
+target="_blank"
+rel="noopener noreferrer"
+href="https://www.google.com/maps/dir/?api=1&destination={{ place.lat }},{{ place.lon }}"
+>
+🧭 Get Directions
+</a>
+
+</div>
+
+</div>
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="flexible-activity">
+
+<div class="flexible-icon">✦</div>
+
+<div>
+<span>FLEXIBLE DAY</span>
+<h3>Explore at your own pace</h3>
+<p>
+No suitable live attractions were returned for this day.
+Use this time for local food, shopping, relaxation or
+discovering the destination.
+</p>
+</div>
+
+</div>
+
+{% endif %}
+
+</div>
+</article>
+
+{% endfor %}
+
+</div>
+</div>
+
+<div id="resultTransport" class="workspace-panel">
+
+<div class="panel-title">
+<div>
+<span>JOURNEY COMPARISON</span>
+<h2>Choose how you travel</h2>
+</div>
+</div>
+
+<div class="transport-warning">
+<span>ⓘ</span>
+<p>
+Transport prices and times are planning estimates.
+Always check the booking provider for current availability
+and final prices.
+</p>
+</div>
+
+{% if start_location %}
+
+<div class="route-summary">
+
+<div>
+<small>FROM</small>
+<strong>{{ start_location }}</strong>
+</div>
+
+<span>→</span>
+
+<div>
+<small>TO</small>
+<strong>{{ destination }}</strong>
+</div>
+
+</div>
+
+{% endif %}
+
+{% if transport_options %}
+
+<div class="transport-cards">
+
+{% for option in transport_options %}
+
+<div class="transport-option {% if option.recommended %}recommended{% endif %}">
+
+<div class="transport-option-top">
+
+<span class="transport-emoji">{{ option.icon }}</span>
+
+{% if option.recommended %}
+<span class="recommended-label">AI VALUE CHOICE</span>
+{% endif %}
+
+</div>
+
+<h3>{{ option.name }}</h3>
+
+<p>{{ option.description }}</p>
+
+<div class="transport-details">
+
+<div>
+<span>EST. TIME</span>
+<strong>{{ option.time }}</strong>
+</div>
+
+<div>
+<span>EST. COST</span>
+<strong>{{ option.cost }}</strong>
+</div>
+
+</div>
+
+<a
+target="_blank"
+rel="noopener noreferrer"
+href="{{ option.link }}"
+class="transport-button"
+>
+Check Option →
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty-state">
+
+<div>🚆</div>
+<h3>Add a starting location</h3>
+<p>
+Go back to the planner and enter your starting location
+to compare transport.
+</p>
+<a href="/planner">← Back to Planner</a>
+
+</div>
+
+{% endif %}
+
+<div class="transport-footer-card">
+
+<div>
+<span>COMPARE MORE ROUTES</span>
+<h3>Check trains, buses, flights and more.</h3>
+</div>
+
+<a
+target="_blank"
+rel="noopener noreferrer"
+href="https://www.rome2rio.com/"
+>
+Open Comparison →
+</a>
+
+</div>
+
+</div>
+
+<div id="resultNearby" class="workspace-panel">
+
+<div class="panel-title">
+<div>
+<span>AROUND YOUR DESTINATION</span>
+<h2>Find what you need nearby</h2>
+</div>
+</div>
+
+<div class="nearby-switch">
+
+<button
+class="nearby-switch-button active"
+onclick="showNearbyTab('food', this)"
+>
+🍴 Food
+</button>
+
+<button
+class="nearby-switch-button"
+onclick="showNearbyTab('hotels', this)"
+>
+🏨 Hotels
+</button>
+
+</div>
+
+<div id="nearbyFood" class="nearby-view active">
+
+<div class="nearby-card">
+
+<div class="nearby-icon">🍴</div>
+
+<div class="nearby-content">
+
+<span>LOCAL FOOD</span>
+<h3>Restaurants & cafés</h3>
+
+<p>
+Find restaurants, cafés and local food around {{ destination }}.
+</p>
+
+<a
+target="_blank"
+rel="noopener noreferrer"
+href="https://www.google.com/maps/search/?api=1&query=restaurants+near+{{ destination|urlencode }}"
+>
+Explore Food →
+</a>
+
+</div>
+
+</div>
+</div>
+
+<div id="nearbyHotels" class="nearby-view">
+
+<div class="nearby-card">
+
+<div class="nearby-icon">🏨</div>
+
+<div class="nearby-content">
+
+<span>STAY</span>
+<h3>Hotels & accommodation</h3>
+
+<p>
+Find hotels and accommodation around {{ destination }}.
+</p>
+
+<a
+target="_blank"
+rel="noopener noreferrer"
+href="https://www.google.com/maps/search/?api=1&query=hotels+near+{{ destination|urlencode }}"
+>
+Explore Hotels →
+</a>
+
+</div>
+
+</div>
+</div>
+
+</div>
+
+<div id="resultMap" class="workspace-panel">
+
+<div class="panel-title">
+
+<div>
+<span>LIVE LOCATION</span>
+<h2>Explore {{ destination }}</h2>
+</div>
+
+</div>
+
+<div class="map-area">
+
+<div class="map-content">
+
+<div class="map-pin">📍</div>
+
+<span>DESTINATION MAP</span>
+
+<h3>{{ destination }}</h3>
+
+<p>
+Explore the destination and get directions using live Google Maps.
+</p>
+
+<div class="map-actions">
+
+<a
+target="_blank"
+rel="noopener noreferrer"
+href="https://www.google.com/maps/search/?api=1&query={{ location.lat }},{{ location.lon }}"
+>
+Open Live Map
+</a>
+
+<a
+target="_blank"
+rel="noopener noreferrer"
+class="map-secondary"
+href="https://www.google.com/maps/dir/?api=1&destination={{ location.lat }},{{ location.lon }}"
+>
+Get Directions
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="assistant-section">
+
+<div class="assistant-heading">
+
+<div class="assistant-brand">
+
+<div class="assistant-logo">✦</div>
+
+<div>
+<span>VOYAGEAI ASSISTANT</span>
+<h2>Need help with your trip?</h2>
+</div>
+
+</div>
+
+<div class="assistant-status">
+<i></i>
+Gemini AI
+</div>
+
+</div>
+
+<div class="quick-questions">
+
+<button onclick="quickMessage('What should I pack for this trip?')">
+🎒 Packing tips
+</button>
+
+<button onclick="quickMessage('What local food should I try?')">
+🍜 Local food
+</button>
+
+<button onclick="quickMessage('How can I save money on this trip?')">
+💰 Save money
+</button>
+
+<button onclick="quickMessage('Give me some important travel tips.')">
+💡 Travel tips
+</button>
+
+</div>
+
+<div id="chatMessages" class="chat-messages">
+
+<div class="bot-message">
+
+<div class="bot-avatar">✦</div>
+
+<div class="bot-bubble">
+Hi! I'm your VoyageAI assistant.
+Ask me about {{ destination }},
+your itinerary, food, transport,
+budget, packing or anything else
+related to your trip.
+</div>
+
+</div>
+
+</div>
+
+<div class="chat-input">
+
+<input
+id="messageInput"
+type="text"
+placeholder="Ask VoyageAI anything..."
+onkeydown="handleEnter(event)"
+>
+
+<button onclick="sendMessage()">
+Send
+<span>→</span>
+</button>
+
+</div>
+
+</section>
+
+<footer class="result-footer">
+
+<span>
+VoyageAI · AI Trip Planner
+</span>
+
+<a href="/planner">
+Create another trip →
+</a>
+
+</footer>
+
+</main>
+
+<script src="{{ url_for('static', filename='script.js') }}?v=4000"></script>
+
+</body>
+</html>

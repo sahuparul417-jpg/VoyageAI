@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VoyageAI — AI Trip Planner</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=4000">
+</head>
+<body class="home-page">
+
+<header class="site-header">
+<a href="/" class="logo"><span class="logo-mark">✦</span><span><b>VoyageAI</b><small>AI TRIP PLANNER</small></span></a>
+<a href="/planner" class="header-cta">Plan a Trip <span>→</span></a>
+</header>
+
+<main class="home-main">
+<section class="hero">
+<div class="hero-content">
+<div class="eyebrow"><span class="eyebrow-dot"></span>INTELLIGENT TRAVEL PLANNING</div>
+<h1>Your journey, <span>intelligently planned.</span></h1>
+<p>Create a personalized travel itinerary with intelligent scoring, live destination data, smart route planning and AI assistance.</p>
+<div class="hero-actions">
+<a href="/planner" class="main-cta">Start Planning <span>→</span></a>
+<button class="outline-cta" onclick="openInfoModal('about')">How it works</button>
+</div>
+</div>
+
+<div class="hero-visual">
+<div class="visual-glow"></div>
+<div class="trip-preview">
+<div class="preview-top"><span class="preview-label">YOUR NEXT JOURNEY</span><span class="preview-status">AI READY</span></div>
+<div class="preview-route">
+<div class="route-point"><span class="route-dot"></span><div><small>START</small><strong>Your Location</strong></div></div>
+<div class="route-line"></div>
+<div class="route-point"><span class="route-dot destination"></span><div><small>DESTINATION</small><strong>Anywhere in the world</strong></div></div>
+</div>
+<div class="preview-stats">
+<div><span>AI PLANNING</span><strong>✓</strong></div>
+<div><span>SMART ROUTE</span><strong>✓</strong></div>
+<div><span>LIVE DATA</span><strong>✓</strong></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="feature-section">
+<div class="feature-card"><span class="feature-number">01</span><div class="feature-icon">🤖</div><h3>AI Trip Planning</h3><p>Destination, interests, budget and trip duration are combined to build your personalized plan.</p></div>
+<div class="feature-card"><span class="feature-number">02</span><div class="feature-icon">🧭</div><h3>Smart Route</h3><p>A* style route sequencing helps arrange places into a practical travel order.</p></div>
+<div class="feature-card"><span class="feature-number">03</span><div class="feature-icon">🌐</div><h3>Live Destination Data</h3><p>Destination information is retrieved dynamically instead of relying only on a fixed list.</p></div>
+</section>
+</main>
+
+<div class="floating-menu">
+<button onclick="openInfoModal('about')">About</button>
+<button onclick="openInfoModal('algorithms')">AI & Algorithms</button>
+<button onclick="openInfoModal('creator')">Created By</button>
+</div>
+
+<div id="infoModal" class="modal-overlay">
+<div class="modal-window">
+<button class="modal-close" onclick="closeInfoModal()">×</button>
+
+<div id="modalAbout" class="modal-view">
+<span class="modal-eyebrow">ABOUT VOYAGEAI</span>
+<h2>Travel planning without the planning headache.</h2>
+<p class="modal-intro">VoyageAI combines AI-based decision making, live geographical information and smart route planning to create an organized travel experience.</p>
+<div class="modal-grid">
+<div class="modal-info-card"><span>🌍</span><h3>Any Destination</h3><p>Enter a city, state, country or destination.</p></div>
+<div class="modal-info-card"><span>🧠</span><h3>Intelligent Decisions</h3><p>Places are scored according to your interests.</p></div>
+<div class="modal-info-card"><span>🗺️</span><h3>Route Planning</h3><p>A* based sequencing organizes your sightseeing route.</p></div>
+<div class="modal-info-card"><span>💬</span><h3>AI Assistant</h3><p>Gemini provides natural travel assistance.</p></div>
+</div>
+</div>
+
+<div id="modalAlgorithms" class="modal-view hidden">
+<span class="modal-eyebrow">AI & ALGORITHMS</span>
+<h2>How VoyageAI makes decisions</h2>
+<p class="modal-intro">The project combines AI concepts with live geographical data and Generative AI.</p>
+
+<div class="algorithm-list">
+<div class="algorithm-row"><span class="algorithm-index">01</span><div><h3>A* Search</h3><p>Used for route sequencing using movement cost and geographical heuristic distance.</p></div></div>
+<div class="algorithm-row"><span class="algorithm-index">02</span><div><h3>Heuristic Search</h3><p>Geographic distance helps estimate which location should be considered next.</p></div></div>
+<div class="algorithm-row"><span class="algorithm-index">03</span><div><h3>AI Scoring</h3><p>Places receive scores based on interests, distance and attraction categories.</p></div></div>
+<div class="algorithm-row"><span class="algorithm-index">04</span><div><h3>Planning & Decision Making</h3><p>Selected places are distributed across the requested number of days.</p></div></div>
+<div class="algorithm-row"><span class="algorithm-index">05</span><div><h3>Generative AI</h3><p>Gemini handles natural-language travel assistance.</p></div></div>
+</div>
+
+<div class="technology-strip">
+<b>TECHNOLOGY</b>
+<span>Python · Flask · HTML · CSS · JavaScript · Gemini · OpenStreetMap · Nominatim · Open-Meteo</span>
+</div>
+</div>
+
+<div id="modalCreator" class="modal-view hidden">
+<span class="modal-eyebrow">PROJECT CREATOR</span>
+<h2>Created By</h2>
+<div class="creator-profile">
+<div class="creator-avatar">PS</div>
+<div>
+<h3>Parul Sahu</h3>
+<p>B.Tech Artificial Intelligence & Machine Learning</p>
+<p>P. R. Pote Patil College of Engineering & Management, Amravati</p>
+</div>
+</div>
+
+<div class="project-card">
+<span>PROJECT</span>
+<strong>VoyageAI — AI Trip Planner</strong>
+</div>
+</div>
+
+</div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}?v=4000"></script>
+</body>
+</html>
